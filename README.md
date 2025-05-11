@@ -1,8 +1,8 @@
-🧬 NLP – Detect & Debunk GMO Misinformation
-🌟 Overview
+## 🧬 NLP – Detect & Debunk GMO Misinformation
+# 🌟 Overview
 An AI-powered multilingual application that identifies and counters misinformation about genetically modified organisms (GMOs) with science-backed responses. Designed for farmers, agricultural workers, and the general public.
 
-🚀 Key Features
+# 🚀 Key Features
 🔍 Detection Capabilities
 Binary Classification: Identifies claims as factual or misinformation
 
@@ -10,21 +10,21 @@ Targeted Myths: Specifically detects common false claims like "GMOs cause cancer
 
 Context-Aware: Understands nuanced phrasing of claims
 
-🌍 Language Support
+# 🌍 Language Support
 Primary Languages: English & Swahili
 
 Auto-Detection: Automatically identifies input language
 
 Expandable: Modular architecture for adding new languages
 
-📚 Knowledge Base
+# 📚 Knowledge Base
 Curated Rebuttals: Responses from WHO, EFSA,snopes and other authoritative sources
 
 Source References: Includes links to original research and statements
 
 Myth Database: Catalog of common GMO misconceptions
 
-🛠️ Technical Implementation
+# 🛠️ Technical Implementation
 🖥️ User Interface
 Streamlit Web App: Simple, accessible interface
 
@@ -32,7 +32,7 @@ Mobile-Friendly: Works on low-bandwidth connections
 
 Clear Outputs: Color-coded verdicts (✅ Fact/❌ Myth)
 
-🤖 NLP Backend
+# 🤖 NLP Backend
 Transformer Models: Fine-tuned BERT-based classifiers
 
 Modular Pipeline:
@@ -45,7 +45,7 @@ Rebuttal generation
 
 Performance: Optimized for accuracy on agricultural claims
 
-📦 Data Sources
+# 📦 Data Sources
 Snopes Fact-Checks: Curated GMO-related claims
 
 WHO Publications: Official positions on GM foods
@@ -54,7 +54,7 @@ EFSA Reports: European risk assessments
 
 Peer-Reviewed Studies: Additional scientific literature
 
-🌱 Use Cases
+# 🌱 Use Cases
 👩‍🌾 Farmer Support
 Field Decision-Making: Quick verification of claims
 
@@ -62,14 +62,14 @@ Extension Services: Tool for agricultural advisors
 
 Digital Literacy: Educational resource
 
-🏛️ Policy & Education
+# 🏛️ Policy & Education
 Journalism: Fact-checking for media
 
 Classroom Tool: Science education resource
 
 Policy Support: Evidence-based decision making
 
-🛠️ Installation & Usage
+# 🛠️ Installation & Usage
 ⚙️ Requirements
 Python 3.8+
 
@@ -87,7 +87,7 @@ git clone https://github.com/your-repo/gmo-misinformation-detector.git
 cd gmo-misinformation-detector
 pip install -r requirements.txt
 streamlit run gmo_nlp_app.py
-🐳 Docker Option
+# 🐳 Docker Option
 bash
 docker build -t gmo-detector .
 docker run -p 8501:8501 gmo-detector

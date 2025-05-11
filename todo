@@ -1,5 +1,5 @@
 Replacing the placeholder classifier with your fine-tuned misinformation model
-
+gmo_misinfo_rebuttals.csv update and filter so as to be suitable for training the model
 Expanding the knowledge base with more myths and rebuttals
 
 Adding audio input for IVR adaptation or deploying via mobile

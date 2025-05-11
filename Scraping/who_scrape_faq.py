@@ -8,24 +8,27 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import get_browser_version
+from webdriver_manager.core.os_manager import ChromeType
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 # Configure Selenium with automatic ChromeDriver management
 def setup_selenium():
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless=new")  # New headless mode
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
     
     try:
-        # Get installed Chrome version and setup matching ChromeDriver
-        chrome_version = get_browser_version()
-        service = Service(ChromeDriverManager(version=chrome_version).install())
+        # Match your Chrome browser version (136.0.7103.93)
+        service = Service(ChromeDriverManager(version="136.0.7103.93").install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         return driver
     except Exception as e:
-        print(f"Failed to setup ChromeDriver: {e}")
-        raise
+        print(f"Failed with exact version matching: {e}")
+        # Fall back to automatic version selection
+        service = Service(ChromeDriverManager().install())
+        return webdriver.Chrome(service=service, options=chrome_options)
 
 # Improved content extraction with better error handling
 def scrape_who_gmo_faq():

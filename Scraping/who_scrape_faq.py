@@ -20,15 +20,14 @@ def setup_selenium():
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
     
     try:
-        # Match your Chrome browser version (136.0.7103.93)
-        service = Service(ChromeDriverManager(version="136.0.7103.93").install())
+        # Let webdriver_manager handle version matching automatically
+        service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         return driver
     except Exception as e:
-        print(f"Failed with exact version matching: {e}")
-        # Fall back to automatic version selection
-        service = Service(ChromeDriverManager().install())
-        return webdriver.Chrome(service=service, options=chrome_options)
+        print(f"Failed to setup ChromeDriver: {e}")
+        print("Try manually downloading ChromeDriver from: https://chromedriver.chromium.org/downloads")
+        raise
 
 # Improved content extraction with better error handling
 def scrape_who_gmo_faq():

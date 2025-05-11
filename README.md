@@ -18,7 +18,7 @@ Auto-Detection: Automatically identifies input language
 Expandable: Modular architecture for adding new languages
 
 📚 Knowledge Base
-Curated Rebuttals: Responses from WHO, EFSA, and other authoritative sources
+Curated Rebuttals: Responses from WHO, EFSA,snopes and other authoritative sources
 
 Source References: Includes links to original research and statements
 

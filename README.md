@@ -117,5 +117,5 @@ Share new labeled datasets
 MIT License - Open for academic and non-commercial use
 
 📧 Contact
-For partnerships or questions: [your-email@example.com]
+For partnerships or questions: [pkorirdarius@gmail.com]
 

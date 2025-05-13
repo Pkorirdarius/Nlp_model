@@ -7,26 +7,28 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from webdriver_manager.firefox import GeckoDriverManager
 
-
-# Configure Selenium with automatic ChromeDriver management
 def setup_selenium():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless=new")  # New headless mode
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-    
+    firefox_options = FirefoxOptions()
+    firefox_options.add_argument("--headless")  # Run in headless mode
+    firefox_options.set_preference("general.useragent.override", 
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:117.0) Gecko/20100101 Firefox/117.0")
+
     try:
-        # Let webdriver_manager handle version matching automatically
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        service = FirefoxService(executable_path=GeckoDriverManager().install())
+        driver = webdriver.Firefox(service=service, options=firefox_options)
+        print(f"✅ FirefoxDriver setup complete. Version: {driver.capabilities['moz:geckodriverVersion']}")
         return driver
+
     except Exception as e:
-        print(f"Failed to setup ChromeDriver: {e}")
-        print("Try manually downloading ChromeDriver from: https://chromedriver.chromium.org/downloads")
+        print(f"❌ Failed to setup FirefoxDriver: {str(e)}")
+        print("\n🔧 Troubleshooting steps:")
+        print("1. Ensure Firefox is installed and updated")
+        print("2. Run: pip install --upgrade selenium webdriver-manager")
+        print("3. Try running in non-headless mode by removing '--headless'")
         raise
 
 # Improved content extraction with better error handling
@@ -38,9 +40,10 @@ def scrape_who_gmo_faq():
         driver.get(url)
         
         # Wait for main content with increased timeout
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".sf-content-block, article, .q-a-detail, main"))
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "article, .sf-content-block, .q-a-detail"))
         )
+
         
         soup = BeautifulSoup(driver.page_source, "html.parser")
         
@@ -55,8 +58,10 @@ def scrape_who_gmo_faq():
         main_content = None
         for selector in selectors:
             main_content = soup.find(selector["name"], class_=selector.get("class"))
+            print(f"Trying selector: {selector} -> Found: {bool(main_content)}")
             if main_content:
                 break
+
                 
         if not main_content:
             raise ValueError("Main content container not found - page structure may have changed")
@@ -65,28 +70,33 @@ def scrape_who_gmo_faq():
         qa_pairs = []
         current_question = None
         current_answer = []
-        
-        for element in main_content.find_all(["h2", "h3", "h4", "p", "div"]):
-            if element.name in ["h2", "h3", "h4"]:
-                if current_question and current_answer:
-                    qa_pairs.append({
-                        "question": current_question,
-                        "answer": " ".join(current_answer).strip()
-                    })
-                current_question = element.get_text(strip=True)
-                current_answer = []
-            elif element.name in ["p", "div"] and current_question:
-                text = element.get_text(strip=True)
-                if text:  # Skip empty elements
-                    current_answer.append(text)
-        
-        # Add the last Q&A pair if exists
+
+        elements = main_content.find_all(["h2", "h3", "h4", "p", "div"])
+
+        for element in elements:
+            text = element.get_text(strip=True)
+            if not text:
+                continue
+
+        if element.name in ["h2", "h3", "h4"] and len(text) < 200:
+        # Treat as a question if it’s short and a heading
+            if current_question and current_answer:
+                qa_pairs.append({
+                    "question": current_question,
+                    "answer": " ".join(current_answer).strip()
+                })
+            current_question = text
+            current_answer = []
+        elif current_question:
+            current_answer.append(text)
+
+        # Capture any remaining pair
         if current_question and current_answer:
             qa_pairs.append({
                 "question": current_question,
-                "answer": " ".join(current_answer).strip()
+             "answer": " ".join(current_answer).strip()
             })
-        
+
         return qa_pairs
     
     except Exception as e:

@@ -12,7 +12,7 @@ import numpy as np
 from pathlib import Path
 import altair as alt
 from transformers import (
-    DistilBertTokenizerFast, 
+    DistilBertTokenizerFast,              
     DistilBertForSequenceClassification
 )
 
